@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="30">
+    <title>CPU使用率</title>
+</head>
+<body>
+    <h1>CPU使用率グラフ（30秒ごとに自動更新）</h1>
+
+    <div style="float: left; margin: 10px;">
+        <h2>現在のグラフ (s5023188)</h2>
+        <img id="current-img" src="" alt="現在のCPUグラフ">
+    </div>
+    
+    <div style="float: left; margin: 10px;">
+        <h2>30秒前のグラフ (s5023188)</h2>
+        <img id="previous-img" src="" alt="30秒前のCPUグラフ">
+    </div>
+
+    <script>
+        // キャッシュを回避して最新の画像を表示する
+        var d = new Date();
+        document.getElementById('current-img').src = 'graph_current.png?' + d.getTime();
+        document.getElementById('previous-img').src = 'graph_previous.png?' + d.getTime();
+    </script>
+</body>
+</html>
