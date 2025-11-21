@@ -1,1 +1,28 @@
-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Java scriptのテスト</title>
+</head>
+<body>
+<p>スクリプト実行前</p>
+<script>
+  var txt = prompt("課題選択ダイアログ");
+  var num = Number(txt);
+  if (num == 1) {
+    document.write('<a href=./index.html>練習１</a>');
+  } else if (num == 2) {
+    document.write('<a href="https://www.shiga-u.ac.jp">練習２</a>');
+  } else if (num == 3) {
+    document.write('<a href="https://www.shiga-u.ac.jp">練習３</a>');
+  } else if (num == 4) {
+    document.write('<a href="https://www.shiga-u.ac.jp">練習４</a>');
+  } else if (num == 5) {
+    document.write('<a href="https://www.shiga-u.ac.jp">練習５</a>');
+  } else {
+    document.write("その番号のリンクはありません。");
+  }
+</script>
+<p>スクリプト実行後</p>
+</body>
+</html>
