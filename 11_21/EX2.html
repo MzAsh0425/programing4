@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Java scriptのテスト</title>
+</head>
+<body>
+<p>スクリプト実行前</p>
+<script>
+  for (var i = 1 ; i < 10 ; i++){
+    var l = i % 3;
+    if (l==0) {
+      document.write("<p>"+i+"は3の倍数</p>");
+    } else {
+      var k = i % 2;
+      if (k==0) {
+        document.write("<p>"+i+"は偶数</p>");
+      } else {
+        document.write("<p>"+i+"は奇数</p>");
+      }
+    }
+  }
+</script>
+<p>スクリプト実行後</p>
+</body>
+</html>
