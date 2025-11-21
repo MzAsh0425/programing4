@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Java scriptのテスト</title>
+<script>
+  function judge(a,b) {
+    if (a > b) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+</script>
+</head>
+<body>
+<p>スクリプト実行前</p>
+<script>
+  var c = judge(1,2);
+  document.write("<p>judge(1,2)="+c+"</p><br>");  
+  var d = judge(2,1);
+  document.write("<p>judge(2,1)="+d+"</p><br>");
+</script>
+<p>スクリプト実行後</p>
+</body>
+</html>
