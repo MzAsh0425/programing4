@@ -12,22 +12,22 @@ function f01() {
     for (var i = 1; i <= 3; i++) {
       var selectName = "s" + i;
       var priceName  = "t" + i;
-      var qtyName    = "t" + i+1;
-      var subTotalName = "t" + i+2;
+      var qtyName    = "t" + (i+1);
+      var subTotalName = "t" + (i+2);
       
-      var qty = Number(fm.[qtyName].value);
-      var price = Number(fm.[selectname].value) * tax;
+      var qty = Number(fm[qtyName].value);
+      var price = Number(fm[selectName].value) * tax;
       var rowTotal = price * qty;
 
-      fm.[priceName].value = Number(fm.[selectname].value);
-      fm.[subTotalName].value = rowTotal;
+      fm[priceName].value = Number(fm[selectname].value);
+      fm[subTotalName].value = rowTotal;
 
       total += rowTotal;
       totalQty += qty;
     }
   
-    fm["t10"].value = totalQty;
-    fm["t11"].value = total;
+    fm.t10.value = totalQty;
+    fm.t11.value = total;
 }
 </script>
 </head>
@@ -85,9 +85,9 @@ function f01() {
   </table>
   <br>
   <span>税率:</span>
-  <input type="radio" value=0.05 name="r1">5%
-  <input type="radio" value=0.08 name="r1" checked>8%
-  <input type="radio" value=0.1 name="r1">10%
+  <input type="radio" value=1.05 name="r1">5%
+  <input type="radio" value=1.08 name="r1" checked>8%
+  <input type="radio" value=1.1 name="r1">10%
   <input type="button" value="自動計算" name="b1" onClick="f01()">
 </form>
 <hr>
