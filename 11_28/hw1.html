@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Java scriptのテスト</title>
+<script>
+function f01() {
+    var taxRate = 0;
+    for (var i = 0; i < fm.r1.length; i++) {
+        if (fm.r1[i].checked) {
+            taxRate = parseFloat(fm.r1[i].value);
+            break;
+        }
+    }
+
+    var total = 0;
+    var totalQty = 0;
+
+    for (var i = 1; i <= 3; i++) {
+      var selectName = "s" + i;
+      var priceName  = "t" + i;
+      var qtyName    = "t" + i+1;
+      var subTotalName = "t" + i+2;
+      
+      var qty = Number(fm.[qtyName].value);
+      var price = Number(fm.[selectname].value) * tax;
+      var rowTotal = price * qty;
+
+      fm.[priceName].value = Number(fm.[selectname].value);
+      fm.[subTotalName].value = rowTotal;
+
+      total += rowTotal;
+      totalQty += qty;
+    }
+  
+    fm["t10"].value = totalQty;
+    fm["t11"].value = total;
+}
+</script>
+</head>
+<body>
+<form name="fm">
+  <table>
+    <tr>
+      <td>商品名</td>
+      <td>税別単価(自動表示)</td>
+      <td>個数</td>
+      <td>税込合計金額(自動計算)</td>
+    </tr>
+    <tr>
+      <td>
+        <select name="s1">
+          <option value=10>えんぴつ</option>
+          <option value=20>けしごむ</option>
+          <option value=30>ノート</option>
+        </select>
+      </td>
+      <td><input type="text" name="t1"><span>円</span></td>
+      <td><input type="text" name="t4"><span>個</span></td>
+      <td><input type="text" name="t7"><span>円</span></td>
+    </tr>
+    <tr>
+      <td>
+        <select name="s2">
+          <option value=100>えんぴつ</option>
+          <option value=200>けしごむ</option>
+          <option value=300>ノート</option>
+        </select>
+      </td>
+      <td><input type="text" name="t2"><span>円</span></td>
+      <td><input type="text" name="t5"><span>個</span></td>
+      <td><input type="text" name="t8"><span>円</span></td>
+    </tr>
+    <tr>
+      <td>
+        <select name="s3">
+          <option value=10>えんぴつ</option>
+          <option value=20>けしごむ</option>
+          <option value=30>ノート</option>
+        </select>
+      </td>
+      <td><input type="text" name="t3"><span>円</span></td>
+      <td><input type="text" name="t6"><span>個</span></td>
+      <td><input type="text" name="t9"><span>円</span></td>
+    </tr>
+    <tr>
+      <td>合計(自動計算)</td>
+      <td></td>
+      <td><input type="text" name="t10"><span>個</span></td>
+      <td><input type="text" name="t11"><span>円</span></td>
+    </tr>
+  </table>
+  <br>
+  <span>税率:</span>
+  <input type="radio" value=0.05 name="r1">5%
+  <input type="radio" value=0.08 name="r1" checked>8%
+  <input type="radio" value=0.1 name="r1">10%
+  <input type="button" value="自動計算" name="b1" onClick="f01()">
+</form>
+<hr>
+<a href="EX1.html">練習１</a>
+<a href="EX2.html">練習２</a>
+<a href="EX3.html">練習３</a>
+<a href="EX4.html">練習４</a>
+  
+</body>
+</html>
