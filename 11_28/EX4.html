@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Java scriptのテスト</title>
+<script>
+function f01() {
+var a = Number(fm.t1.value);
+var b = Number(fm.t2.value);
+if (fm.c1.checked) {
+fm.t3.value = a*b/1000*11 + "円";
+} else {
+fm.t3.value = a*b/1000*26 + "円";
+}
+}
+</script>
+</head>
+<body>
+<form name="fm">
+  <span>消費電力(W):</span>
+  <input type="text" name="t1"><br>
+  <span>使用時間(H):</span>
+  <input type="text" name="t2"><br>
+  <span>時間帯:</span>
+  <input type="checkbox" name="c1">深夜電力<br>
+  <input type="button" value="電気代" name="b1"><br>
+  <span>結果:</span>
+  <input type="text" name="t3">
+</body>
+</html>
