@@ -5,16 +5,9 @@
 <title>Java scriptのテスト</title>
 <script>
 function f01() {
-    var taxRate = 0;
-    for (var i = 0; i < fm.r1.length; i++) {
-        if (fm.r1[i].checked) {
-            taxRate = parseFloat(fm.r1[i].value);
-            break;
-        }
-    }
-
     var total = 0;
     var totalQty = 0;
+    var tax = Number(fm.r1.value);
 
     for (var i = 1; i <= 3; i++) {
       var selectName = "s" + i;
