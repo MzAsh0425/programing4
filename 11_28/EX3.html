@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Java scriptのテスト</title>
+<script>
+function f01() {
+  var a = Number(fm.t1.value);
+  var b = Number(fm.t2.value);
+  fm.t3.value = a+b;
+}
+</script>
+</head>
+<body>
+<form name="fm">
+  <input type="text" name="t1">
+  <h3>と</h3>
+  <input type="text" name="t2">
+  <h3>を</h3>
+  <input type="button" value="足すと" name="b1" onClick="f01()">
+  <input type="text" name="t3">
+</body>
+</html>
