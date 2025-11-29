@@ -12,8 +12,8 @@ function f01() {
     for (var i = 1; i <= 3; i++) {
       var selectName = "s" + i;
       var priceName  = "t" + i;
-      var qtyName    = "t" + (i+1);
-      var subTotalName = "t" + (i+2);
+      var qtyName    = "t" + (i+3);
+      var subTotalName = "t" + (i+6);
       
       var qty = Number(fm[qtyName].value);
       var price = Number(fm[selectName].value) * tax;
@@ -43,9 +43,9 @@ function f01() {
     <tr>
       <td>
         <select name="s1">
-          <option value=10>えんぴつ</option>
-          <option value=20>けしごむ</option>
-          <option value=30>ノート</option>
+          <option value=100>えんぴつ</option>
+          <option value=200>けしごむ</option>
+          <option value=300>ノート</option>
         </select>
       </td>
       <td><input type="text" name="t1"><span>円</span></td>
@@ -67,9 +67,9 @@ function f01() {
     <tr>
       <td>
         <select name="s3">
-          <option value=10>えんぴつ</option>
-          <option value=20>けしごむ</option>
-          <option value=30>ノート</option>
+          <option value=100>えんぴつ</option>
+          <option value=200>けしごむ</option>
+          <option value=300>ノート</option>
         </select>
       </td>
       <td><input type="text" name="t3"><span>円</span></td>
