@@ -33,12 +33,12 @@ function drawWeather() {
   var px_h, py_h;
   var px_n, py_n;
   var px_a, py_a;
-  var xStep = 20; 
+  var xStep = 2.5; 
   var yZero = 400;
   var yScale = 10;
   for (var i = 2; i < result.length-1; i++) {
     var items = result[i];
-    var x = 50 + (i - 2) * xStep;
+    var x = (i - 2) * xStep;
     var tempH = Number(items[1]);
     var tempN = Number(items[2]);
     var tempA = Number(items[3]);
@@ -69,13 +69,13 @@ function drawLegend(ctx) {
   ctx.font = "16px sans-serif";
   ctx.fillText("0℃ Line", 810, 405);
   ctx.fillStyle = "rgb(240,240,240)";
-  ctx.fillRect(50, 50, 100, 80);
+  ctx.fillRect(0, 0, 100, 80);
   ctx.fillStyle = "red";
-  ctx.fillText("■ 彦根", 60, 70);
+  ctx.fillText("ー 彦根", 60, 70);
   ctx.fillStyle = "green";
-  ctx.fillText("■ 那覇", 60, 95);
+  ctx.fillText("ー 那覇", 60, 95);
   ctx.fillStyle = "blue";
-  ctx.fillText("■ 網走", 60, 120);
+  ctx.fillText("ー 網走", 60, 120);
 }
 </script>
 </head>
