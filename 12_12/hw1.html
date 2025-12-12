@@ -40,8 +40,8 @@ function drawWeather() {
     var items = result[i];
     var x = (i - 2) * xStep;
     var tempH = Number(items[1]);
-    var tempN = Number(items[2]);
-    var tempA = Number(items[3]);
+    var tempN = Number(items[5]);
+    var tempA = Number(items[9]);
     var y_h = yZero - tempH * yScale;
     var y_n = yZero - tempN * yScale;
     var y_a = yZero - tempA * yScale;
@@ -71,11 +71,11 @@ function drawLegend(ctx) {
   ctx.fillStyle = "rgb(240,240,240)";
   ctx.fillRect(0, 0, 100, 80);
   ctx.fillStyle = "red";
-  ctx.fillText("ー 彦根", 10, 20);
+  ctx.fillText("ー 彦根", 30, 20);
   ctx.fillStyle = "green";
-  ctx.fillText("ー 那覇", 10, 45);
+  ctx.fillText("ー 那覇", 30, 45);
   ctx.fillStyle = "blue";
-  ctx.fillText("ー 網走", 10, 70);
+  ctx.fillText("ー 網走", 30, 70);
 }
 </script>
 </head>
@@ -92,5 +92,6 @@ function drawLegend(ctx) {
 <a href="EX2.html">練習２</a>
 <a href="EX3.html">練習３</a>
 <a href="EX4.html">練習４</a>
+<a href="EX5.html">練習5</a>
 </body>
 </html>
