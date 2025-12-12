@@ -11,7 +11,7 @@ function line( ctx, x1, y1, x2, y2, r, g, b ) {
   ctx.lineTo(x2,y2);
   ctx.stroke();
 }
-function 02() {
+function draw() {
   var cvs = document.getElementById("hcnv");
   var ctx = cvs.getContext("2d");
   var K = 768;
@@ -22,5 +22,8 @@ function 02() {
 </script>
 </head>
 <body>
+<form name="fm">
+<input type="button" value="描画!" onclick="draw()">
+</form>
 <canvas id="hcnv" width="1024" height="768"></canvas></body>
 </html>
