@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Java scriptのテスト</title>
 <script>
-function 04 {
+function draw() {
   var cvs = document.getElementById("hcnv");
   var ctx = cvs.getContext("2d");
   for (var x = 0; x < 250; x += 25) {
@@ -17,5 +17,8 @@ function 04 {
 </script>
 </head>
 <body>
+<form name="fm">
+<input type="button" value="描画!" onclick="draw()">
+</form>
 <canvas id="hcnv" width="1024" height="768"></canvas></body>
 </html>
