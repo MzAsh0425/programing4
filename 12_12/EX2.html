@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Java scriptのテスト</title>
+<script>
+function line( ctx, x1, y1, x2, y2, r, g, b ) {
+  ctx.strokeStyle = "rgb("+r+","+g+","+b+")";
+  ctx.beginPath();
+  ctx.moveTo(x1,y1);
+  ctx.lineTo(x2,y2);
+  ctx.stroke();
+}
+function 02() {
+  var cvs = document.getElementById("hcnv");
+  var ctx = cvs.getContext("2d");
+  var K = 768;
+  for (var x = 0; x <= K; x += 20) { 
+    line(ctx, x, 0, 0, K - x, 0, 255, 0);
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="hcnv" width="1024" height="768"></canvas></body>
+</html>
