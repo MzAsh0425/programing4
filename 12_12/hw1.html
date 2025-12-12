@@ -33,7 +33,7 @@ function drawWeather() {
   var px_h, py_h;
   var px_n, py_n;
   var px_a, py_a;
-  var xStep = 2.5; 
+  var xStep = 2.8; 
   var yZero = 400;
   var yScale = 10;
   for (var i = 2; i < result.length-1; i++) {
@@ -71,11 +71,11 @@ function drawLegend(ctx) {
   ctx.fillStyle = "rgb(240,240,240)";
   ctx.fillRect(0, 0, 100, 80);
   ctx.fillStyle = "red";
-  ctx.fillText("ー 彦根", 60, 70);
+  ctx.fillText("ー 彦根", 10, 20);
   ctx.fillStyle = "green";
-  ctx.fillText("ー 那覇", 60, 95);
+  ctx.fillText("ー 那覇", 10, 45);
   ctx.fillStyle = "blue";
-  ctx.fillText("ー 網走", 60, 120);
+  ctx.fillText("ー 網走", 10, 70);
 }
 </script>
 </head>
