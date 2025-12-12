@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Java scriptのテスト</title>
+<script>
+function 04 {
+  var cvs = document.getElementById("hcnv");
+  var ctx = cvs.getContext("2d");
+  for (var x = 0; x < 250; x += 25) {
+    for (var y = 0; y < 250; y += 25) {
+        ctx.fillStyle = "rgb(" + x + "," + y + ",0)";
+        ctx.fillRect(x, y, 25, 25);
+    }
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="hcnv" width="1024" height="768"></canvas></body>
+</html>
