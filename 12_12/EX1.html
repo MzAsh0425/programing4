@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Java scriptのテスト</title>
+<script>
+function 01() {
+    var cvs = document.getElementById("hcnv");
+    var ctx = cvs.getContext("2d");
+    ctx.strokeStyle = "rgb(0,0,0)";
+    ctx.beginPath();
+    ctx.moveTo(0, 0); 
+    ctx.lineTo(1024, 0); 
+    ctx.lineTo(0, 768); 
+    ctx.closePath(); 
+    ctx.stroke();
+}
+</script>
+</head>
+<body>
+<canvas id="hcnv" width="1024" height="768"></canvas></body>
+</html>
