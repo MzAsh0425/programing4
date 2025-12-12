@@ -12,21 +12,21 @@ function line( ctx, x1, y1, x2, y2, r, g, b ) {
   ctx.stroke();
 }
 function 03() {
-    var cvs = document.getElementById("hcnv");
-    var ctx = cvs.getContext("2d");
-    var x1, y1;
-    var ox = 500;
-    var oy = 500;
-    for (var x = -500; x <= 500; x++) {
-        var y = x**2 / 500;
-        var x2 = ox + x;
-        var y2 = oy - y;
-        if (x != -500) {
-            line(ctx, x1, y1, x2, y2, 0, 255, 0);
-        }
-        x1 = x2;
-        y1 = y2;
+  var cvs = document.getElementById("hcnv");
+  var ctx = cvs.getContext("2d");
+  var x1, y1;
+  var ox = 500;
+  var oy = 500;
+  for (var x = -500; x <= 500; x++) {
+    var y = x**2 / 500;
+    var x2 = ox + x;
+    var y2 = oy - y;
+    if (x != -500) {
+      line(ctx, x1, y1, x2, y2, 0, 255, 0);
     }
+    x1 = x2;
+    y1 = y2;
+  }
 }
 </script>
 </head>
