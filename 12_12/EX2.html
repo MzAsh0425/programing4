@@ -15,7 +15,7 @@ function draw() {
   var cvs = document.getElementById("hcnv");
   var ctx = cvs.getContext("2d");
   var K = 768;
-  for (var x = 0; x <= K; x += 20) { 
+  for (var x = 0; x <= K; x += 8) { 
     line(ctx, x, 0, 0, K - x, 0, 255, 0);
   }
 }
