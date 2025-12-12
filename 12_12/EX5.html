@@ -27,6 +27,9 @@ function mouseMove() {
 </script>
 </head>
 <body>
+<form name="fm">
+<input type="button" value="描画!" onclick="mouseMove()">
+</form>
 <canvas id="hcnv" width="1024" height="768"
  onMousemove="mouseMove()" onMousedown="mouseB=1;" 
  onMouseup="mouseB=0;"></canvas>
