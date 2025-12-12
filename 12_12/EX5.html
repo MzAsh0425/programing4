@@ -13,23 +13,20 @@ function line( ctx, x1, y1, x2, y2, r, g, b ) {
 }
 var mouseX = 0, mouseY = 0, mouseB = 0, pmouseX = 0, pmouseY = 0;
 function mouseMove() {
-    var cvs = document.getElementById("hcnv");
-    var ctx = cvs.getContext("2d");
-    var rect = cvs.getBoundingClientRect();
-    mouseX = event.pageX - rect.left;
-    mouseY = event.pageY - rect.top;
-    if (mouseB != 0) {
-        line(ctx, pmouseX, pmouseY, mouseX, mouseY, 0, 255, 0);
-    }
-    pmouseX = mouseX;
-    pmouseY = mouseY;
+  var cvs = document.getElementById("hcnv");
+  var ctx = cvs.getContext("2d");
+  var rect = cvs.getBoundingClientRect();
+  mouseX = event.pageX - rect.left;
+  mouseY = event.pageY - rect.top;
+  if (mouseB != 0) {
+    line(ctx, pmouseX, pmouseY, mouseX, mouseY, 0, 255, 0);
+  }
+  pmouseX = mouseX;
+  pmouseY = mouseY;
 }
 </script>
 </head>
 <body>
-<form name="fm">
-<input type="button" value="描画!" onclick="mouseMove()">
-</form>
 <canvas id="hcnv" width="1024" height="768"
  onMousemove="mouseMove()" onMousedown="mouseB=1;" 
  onMouseup="mouseB=0;"></canvas>
