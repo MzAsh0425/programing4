@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>three.js app test</title>
+<script src="three.js"></script>
+</head>
+<body>
+<script>
+//初期化処理
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera( 70, 1000/500, 0.1, 10000 );
+var renderer = new THREE.WebGLRenderer();
+var light = new THREE.DirectionalLight(0xffffff);
+renderer.setSize(1000, 500 );
+document.body.appendChild( renderer.domElement );
+light.position.set(1, 1, 1);
+scene.add(light);
+camera.position.set(0, 0, 300);
+
+var geometry = new THREE.BoxGeometry(100, 100, 100);
+var material = new THREE.MeshStandardMaterial( {color: 0xffffff} );
+var cube = new THREE.Mesh( geometry, material );
+scene.add( cube );
+  
+function draw() {
+//レンダリングループ
+equestAnimationFrame( draw );
+cube.rotation.x += 0.01;
+cube.rotation.y += 0.01;
+renderer.render( scene, camera );
+}
+draw();
+</script>
+</body>
+</html>
