@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>three.js app test</title>
+<script src="three.js"></script>
+</head>
+<body>
+<script>
+//初期化処理
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera( 70, 1000/500, 0.1, 10000 );
+  var renderer = new THREE.WebGLRenderer();
+  var light = new THREE.DirectionalLight(0xff0000);
+  var light2 = new THREE.DirectionalLight(0x0000ff);
+  var light3 = new THREE.PointLight(0xffffff,2,3000,1.0);
+  renderer.setSize(1000, 500 );
+  document.body.appendChild( renderer.domElement );
+  light.position.set(1, 1, 1);
+  scene.add(light);
+  light2.position.set(1, 1, 1);
+  scene.add(light2);
+  light3.position.set(0, -1000, 0);
+  scene.add(light3);
+  camera.position.set(0, 0, 500);
+  
+  var geometry = new THREE.BoxGeometry(100, 100, 100);
+  var material = new THREE.MeshStandardMaterial( {color: 0xffffff} );
+  var cube = new THREE.Mesh( geometry, material );
+  scene.add( cube );
+
+  var geometry2 = new THREE.BoxGeometry(20000, 0.1, 20000);
+  var material2 = new THREE.MeshStandardMaterial({ color: 0x808080 });
+  var ground = new THREE.Mesh( geometry2, material2 );
+  ground.position.set(0,-1000,0);
+  scene.add( ground );
+
+  var geometry3 = new THREE.SphereGeometry(100, 32, 32);
+  var material3 = new THREE.MeshStandardMaterial( {color: 0xffffff} );
+  var sphere = new THREE.Mesh( geometry3, material3 );
+  sphere.position.set(300,0,0);
+  scene.add( sphere );
+    
+  function draw() {
+    //レンダリングループ
+    requestAnimationFrame( draw );
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+    cube.position.z -= 10;
+    renderer.render( scene, camera );
+  }
+  draw();
+</script>
+</body>
+</html>
