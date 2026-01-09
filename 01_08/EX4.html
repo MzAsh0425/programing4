@@ -16,7 +16,7 @@
   document.body.appendChild( renderer.domElement );
   light.position.set(1, 1, 1);
   scene.add(light);
-  camera.position.set(2000,0,0); 
+  camera.position.set(-2000,0,0); 
   
   var URL='https://www.gakujutsu.co.jp/text/isbn978-4-7806-0708-6/file/';
   var loader = new THREE.TextureLoader();
@@ -32,7 +32,7 @@
   scene.add( cube );
 
   var geometry2 = new THREE.BoxGeometry(50, 50, 200);
-  var material2 = new THREE.MeshStandardMaterial( { map: texture1 } );
+  var material2 = new THREE.MeshStandardMaterial( { map: texture1 } );  
   var cube2 = new THREE.Mesh( geometry2, material2 );
   cube2.position.set(0, 500, 0);
   scene.add( cube2 );
@@ -61,15 +61,7 @@
   scene.add( ground );
   }
   }
-
-  /*
-  var mouseX = 0;
-  var mouseY = 0;
-  document.addEventListener("mousemove", (event) => {
-  mouseX = event.pageX / window.innerWidth;
-  mouseY = event.pageY / window.innerHeight;
-  */
-  
+    
   var theta=0;
   function draw() {
     requestAnimationFrame( draw );
@@ -80,19 +72,9 @@
     cube2.position.z = 500*Math.sin( theta );
     sphere.position.x = 750*Math.cos( theta );
     sphere.position.z = 750*Math.sin( theta );
-    camera.position.x = 2000*Math.cos( theta );
-    camera.position.z = 2000*Math.sin( theta );
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
-    /*
-    var rot = mouseX * 2 * Math.PI;
-    var h = mouseY * 2000 - 1000;
-    camera.position.set(Math.sin(rot)*2000, h, Math.cos(rot)*2000);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
-    */
     renderer.render( scene, camera );
   }
   draw();
-});
 </script>
 </body>
 </html>
