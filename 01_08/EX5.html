@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>three.js app test</title>
+<script src="three.js"></script>
+</head>
+<body>
+<script>
+//初期化処理
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera( 70, 1000/500, 0.1, 10000 );
+  var renderer = new THREE.WebGLRenderer();
+  var light = new THREE.DirectionalLight(0xffffff);
+  renderer.setSize(1000, 500 );
+  document.body.appendChild( renderer.domElement );
+  light.position.set(1, 1, 1);
+  scene.add(light);
+  camera.position.set(-2000,0,0); 
+  
+  var URL='https://www.gakujutsu.co.jp/text/isbn978-4-7806-0708-6/file/';
+  var loader = new THREE.TextureLoader();
+  var texture1 = loader.load(URL+'brick.jpg');
+  var texture2 = loader.load(URL+'earth.jpg');
+  var texture3 = loader.load(URL+'sun.jpg');
+  var texture4 = loader.load(URL+'moon.jpg');
+
+  /*
+  var geometry = new THREE.BoxGeometry(100, 100, 100);
+  var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+  var cube = new THREE.Mesh( geometry, material );
+  cube.position.set(250, 0, 0)
+  scene.add( cube );
+
+  var geometry2 = new THREE.BoxGeometry(50, 50, 200);
+  var material2 = new THREE.MeshStandardMaterial( { map: texture1 } );  
+  var cube2 = new THREE.Mesh( geometry2, material2 );
+  cube2.position.set(0, 500, 0);
+  scene.add( cube2 );
+
+  var geometry3 = new THREE.SphereGeometry(100, 32, 32);
+  var material3 = new THREE.MeshStandardMaterial( { map: texture2 } );
+  var sphere = new THREE.Mesh( geometry3, material3 );
+  sphere.position.set(0,0,750);
+  scene.add( sphere );
+  */
+
+  var bus_geometry = new THREE.BoxGeometry(2000, 200, 500);
+  var bus_material = new THREE.MeshStandardMaterial( { color: 0xffffff } );
+  var bus = new THREE.Mesh( bus_geometry, bus_material );
+  bus.position.set(0,0,0);
+  scene.add(bus);
+
+  var passenger=[];
+  for (var y = 0 ; y< 5; y++)
+  {
+  var man_geometry = new THREE.SphereGeometry(100, 32, 32);
+  var man_material = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
+  passenger.push( new THREE.Mesh( man_geometry, man_material ) );
+  passenger[y].position.set(y*400-800,100,0);
+  bus.add(passenger[y]);
+  }
+
+  var light3 = new THREE.AmbientLight(0xFFFFFF, 1.0);
+  scene.add(light3);
+
+  var g_geometry = new THREE.BoxGeometry(500, 0.1, 500);
+  var g_material = new THREE.MeshStandardMaterial({ color: 0x808080 });
+  for ( var x = -30 ; x<30 ; x++ ) {
+  for ( var y = -20 ; y<20 ; y++ ) {
+  var u=x*2;
+  var v=y;
+  if (y & 1) {u+=1};
+  var ground = new THREE.Mesh( g_geometry, g_material );
+  ground.position.set(u*500, -2000, v*500);
+  scene.add( ground );
+  var ground = new THREE.Mesh( g_geometry, g_material );
+  ground.position.set(u*500, 2000, v*500);
+  scene.add( ground );
+  }
+  }
+    
+  var theta=0;
+  function draw() {
+    requestAnimationFrame( draw );
+    /*
+    theta += 0.01;
+    cube.position.x = 250*Math.cos( theta );
+    cube.position.y = 250*Math.sin( theta );
+    cube2.position.y = 500*Math.cos( theta );
+    cube2.position.z = 500*Math.sin( theta );
+    sphere.position.x = 750*Math.cos( theta );
+    sphere.position.z = 750*Math.sin( theta );
+    */
+    bus.position.x+=5;
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    renderer.render( scene, camera );
+  }
+  draw();
+</script>
+</body>
+</html>
