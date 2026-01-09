@@ -65,8 +65,8 @@
     cube2.position.z = 500*Math.sin( theta );
     sphere.position.x = 750*Math.cos( theta );
     sphere.position.z = 750*Math.sin( theta );
-    camera.rotation.x = 2000*Math.cos( theta );
-    camera.rotation.z = 2000*Math.sin( theta );
+    camera.position.x = 2000*Math.cos( theta );
+    camera.position.z = 2000*Math.sin( theta );
     renderer.render( scene, camera );
   }
   draw();
