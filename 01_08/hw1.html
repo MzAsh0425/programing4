@@ -14,7 +14,14 @@
   renderer.setSize(1000, 500 );
   document.body.appendChild( renderer.domElement );
   camera.position.set(2000,0,0); 
-  
+
+  var URL='https://www.gakujutsu.co.jp/text/isbn978-4-7806-0708-6/file/';
+  var loader = new THREE.TextureLoader();
+  var texture1 = loader.load(URL+'brick.jpg');
+  var texture2 = loader.load(URL+'earth.jpg');
+  var texture3 = loader.load(URL+'sun.jpg');
+  var texture4 = loader.load(URL+'moon.jpg');
+    
   var geometry = new THREE.SphereGeometry(300, 32, 32);
   var material = new THREE.MeshStandardMaterial( { map: texture3 } );
   var sun = new THREE.Mesh( geometry, material );
@@ -78,8 +85,8 @@
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     renderer.render( scene, camera );
   }
+  });
   draw();
-});
 </script>
 </body>
 </html>
