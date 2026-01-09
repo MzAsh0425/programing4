@@ -35,13 +35,13 @@
   var geometry2 = new THREE.SphereGeometry(200, 32, 32);
   var material2 = new THREE.MeshStandardMaterial( { map: texture2 } );
   var earth = new THREE.Mesh( geometry2, material2 );
-  earth.position.set(0, 1000, 0);
+  earth.position.set(1000, 0, 0);
   sun.add( earth );
 
   var geometry3 = new THREE.SphereGeometry(100, 32, 32);
   var material3 = new THREE.MeshStandardMaterial( { map: texture4 } );
   var moon = new THREE.Mesh( geometry3, material3 );
-  moon.position.set(0,0,300);
+  moon.position.set(300,0,0);
   earth.add( moon );
 
   var light3 = new THREE.AmbientLight(0xFFFFFF, 1.0);
