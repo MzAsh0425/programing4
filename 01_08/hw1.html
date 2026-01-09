@@ -68,6 +68,7 @@
   document.addEventListener("mousemove", (event) => {
   mouseX = event.pageX / window.innerWidth;
   mouseY = event.pageY / window.innerHeight;
+  });
     
   var theta=0;
   function draw() {
@@ -85,7 +86,6 @@
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     renderer.render( scene, camera );
   }
-  });
   draw();
 </script>
 </body>
