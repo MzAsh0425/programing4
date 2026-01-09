@@ -93,6 +93,10 @@
     sphere.position.z = 750*Math.sin( theta );
     */
     bus.position.x+=5;
+    passenger[2].position.x=500*Math.sin(1*t);
+    x=2000*Math.cos(0.1*t);
+    y=2000*Math.sin(0.1*t);
+    camera.position.set(x, 0, y)
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     renderer.render( scene, camera );
   }
