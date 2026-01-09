@@ -72,6 +72,7 @@
     cube2.position.z = 500*Math.sin( theta );
     sphere.position.x = 750*Math.cos( theta );
     sphere.position.z = 750*Math.sin( theta );
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
     renderer.render( scene, camera );
   }
   draw();
