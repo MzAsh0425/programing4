@@ -31,7 +31,6 @@
         sphere.position.set(0, 0, 0);
         scene.add(sphere);
 
-        // 2つ目の地点 (red_sphere)
         var r_geometry = new THREE.SphereGeometry(30, 32, 32);
         var r_material = new THREE.MeshBasicMaterial({ map: texture[1], side: THREE.BackSide });
         var red_sphere = new THREE.Mesh(r_geometry, r_material);
