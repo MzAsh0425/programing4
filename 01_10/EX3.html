@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>streetview app</title>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        var URL = 'https://www.gakujutsu.co.jp/text/isbn978-4-7806-0708-6/file/';
+        var texture = [];
+        var loader = new THREE.TextureLoader();
+        loader.crossOrigin = 'anonymous';
+
+        texture.push(loader.load(URL + '1.jpg'));
+        texture.push(loader.load(URL + '2.jpg'));
+        texture.push(loader.load(URL + '3.jpg'));
+        texture.push(loader.load(URL + '4.jpg'));
+
+        var scene = new THREE.Scene();
+        
+        var camera = new THREE.PerspectiveCamera(70, 1000 / 500, 0.1, 10000);
+        camera.position.set(0, 0, 0);
+
+        var geometry = new THREE.SphereGeometry(1000, 32, 32);
+        var material = new THREE.MeshBasicMaterial({
+            map: texture[0],
+            side: THREE.BackSide
+        });
+        var sphere = new THREE.Mesh(geometry, material);
+        sphere.position.set(0, 0, 0);
+        scene.add(sphere);
+
+        var r_geometry = new THREE.SphereGeometry(30, 32, 32);
+        var r_material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        var red_sphere = new THREE.Mesh(r_geometry, r_material);
+        red_sphere.position.set(-500, 0, 0);
+        scene.add(red_sphere);
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(1000, 500);
+        document.body.appendChild(renderer.domElement);
+
+        var light = new THREE.AmbientLight(0xFFFFFF, 2.0);
+        scene.add(light);
+
+        var mouseX = 0, mouseY = 0, mouseB = 0;
+        var u = 0, v = 0;
+        document.addEventListener("mousemove", (event) => {
+            var rect = event.target.getBoundingClientRect();
+            u = (event.clientX - rect.left) * 2 / (rect.right - rect.left) - 1;
+            v = (event.clientY - rect.top) * 2 / (rect.top - rect.bottom) + 1;
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+        });
+        document.addEventListener("mousedown", (event) => {
+            mouseB = 1;
+        });
+        document.addEventListener("mouseup", (event) => {
+            mouseB = 0;
+        });
+
+        var rot = 0, h = 0;
+        var pmouseX = 0, pmouseY = 0, pmouseB = 0;
+
+        function detectObject(camera, target_list, exception, u, v) {
+            var vector = new THREE.Vector3(u, v, 1);
+            vector.unproject(camera);
+            var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+            var obj_list = ray.intersectObjects(target_list);
+            for (var j = 0; j < obj_list.length; j++) {
+                if (obj_list[j].object != exception) {
+                    return obj_list[j].object;
+                }
+            }
+            return null;
+        }
+
+        var target_list = [];
+        target_list.push(red_sphere);
+
+        function draw() {
+            requestAnimationFrame(draw);
+
+            if (mouseB == 1) {
+                rot -= (pmouseX - mouseX) * 0.005;
+                h -= (pmouseY - mouseY) * 0.005;
+                if (h >= Math.PI / 2) h = Math.PI / 2;
+                if (h <= -Math.PI / 2) h = -Math.PI / 2;
+            }
+
+            if (mouseB == 1 && pmouseB == 0) {
+                var obj = detectObject(camera, target_list, null, u, v);
+                if (obj != null) {
+                    obj.scale.set(3, 3, 3);
+                }
+            }
+
+            pmouseX = mouseX;
+            pmouseY = mouseY;
+            pmouseB = mouseB;
+
+            camera.lookAt(new THREE.Vector3(
+                Math.sin(rot) * 10000,
+                Math.sin(h) * 10000,
+                Math.cos(rot) * 10000
+            ));
+
+            renderer.render(scene, camera);
+        };
+
+        draw();
+    </script>
+</body>
+</html>
