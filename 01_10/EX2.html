@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>streetview app</title>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        var URL = 'https://www.gakujutsu.co.jp/text/isbn978-4-7806-0708-6/file/';
+        var texture = [];
+        var loader = new THREE.TextureLoader();
+        loader.crossOrigin = 'anonymous';
+
+        texture.push(loader.load(URL + '1.jpg'));
+        texture.push(loader.load(URL + '2.jpg'));
+        texture.push(loader.load(URL + '3.jpg'));
+        texture.push(loader.load(URL + '4.jpg'));
+
+        var scene = new THREE.Scene();
+        
+        var camera = new THREE.PerspectiveCamera(70, 1000 / 500, 0.1, 10000);
+        camera.position.set(0, 0, 0);
+
+        var geometry = new THREE.SphereGeometry(1000, 32, 32);
+        var material = new THREE.MeshBasicMaterial({
+            map: texture[0],
+            side: THREE.BackSide
+        });
+        var sphere = new THREE.Mesh(geometry, material);
+        sphere.position.set(0, 0, 0);
+        scene.add(sphere);
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(1000, 500);
+        document.body.appendChild(renderer.domElement);
+
+        var light = new THREE.AmbientLight(0xFFFFFF, 2.0);
+        scene.add(light);
+
+        var mouseX = 0, mouseY = 0, mouseB = 0;
+        document.addEventListener("mousemove", (event) => {
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+        });
+        document.addEventListener("mousedown", (event) => {
+            mouseB = 1;
+        });
+        document.addEventListener("mouseup", (event) => {
+            mouseB = 0;
+        });
+
+        var rot = 0, h = 0;
+        var pmouseX = 0, pmouseY = 0;
+
+        function draw() {
+            requestAnimationFrame(draw);
+
+            if (mouseB == 1) {
+                rot -= (pmouseX - mouseX) * 0.005;
+                h -= (pmouseY - mouseY) * 0.005;
+                if (h >= Math.PI / 2) h = Math.PI / 2;
+                if (h <= -Math.PI / 2) h = -Math.PI / 2;
+            }
+
+            camera.lookAt(new THREE.Vector3(
+                Math.sin(rot) * 10000,
+                Math.sin(h) * 10000,
+                Math.cos(rot) * 10000
+            ));
+
+            pmouseX = mouseX;
+            pmouseY = mouseY;
+
+            renderer.render(scene, camera);
+        };
+
+        draw();
+    </script>
+</body>
+</html>
