@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Final Project: 3D Graph</title>
+<script src="three.js"></script>
+</head>
+<body>
+<script>
+// ■ 1. 初期化処理（講義の定型文）
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera( 70, 1000/500, 0.1, 10000 );
+  var renderer = new THREE.WebGLRenderer();
+  renderer.setSize(1000, 500 );
+  document.body.appendChild( renderer.domElement );
+  
+  // カメラ位置の調整（データ全体が見渡せる位置に）
+  camera.position.set(0, 300, 600); 
+  
+  // ライト（講義コードと同様の設定）
+  var light = new THREE.DirectionalLight(0xffffff);
+  light.position.set(1, 1, 1);
+  scene.add(light);
+  var light3 = new THREE.AmbientLight(0xFFFFFF, 0.5);
+  scene.add(light3);
+
+// ■ 2. データの定義（12_12の内容を応用）
+  // ここでは配列に直接数値を入れますが、12_12/hw1.htmlのgetCSV関数を使って外部データを読み込んでも良いでしょう
+  var data = [50, 120, 80, 200, 150, 40, 90, 170, 110, 60]; 
+
+// ■ 3. グラフの生成（01_08/EX5.htmlのループ処理を応用）
+  // グループを作成してグラフ全体をまとめる
+  var graphGroup = new THREE.Group();
+  scene.add(graphGroup);
+
+  var barWidth = 40; // 棒の太さ
+  var gap = 20;      // 棒の間隔
+
+  for (var i = 0; i < data.length; i++) {
+    var value = data[i];
+    
+    // データの値を高さ(y)に反映した箱を作る
+    // BoxGeometry(幅, 高さ, 奥行き)
+    var geometry = new THREE.BoxGeometry(barWidth, value, barWidth);
+    
+    // 綺麗な色が出るMeshNormalMaterialを使用（またはMeshToonMaterialなど）
+    var material = new THREE.MeshNormalMaterial(); 
+    
+    var bar = new THREE.Mesh( geometry, material );
+    
+    // 位置合わせ：
+    // x: 配列の順番ごとにずらす
+    // y: 高さが中心から伸びるため、高さの半分だけ上にずらして「地面から生えている」ように見せる
+    var xPos = (barWidth + gap) * i - (data.length * (barWidth + gap) / 2);
+    bar.position.set(xPos, value / 2, 0);
+    
+    graphGroup.add(bar);
+  }
+
+  // 地面（グリッドや平面）があると位置関係がわかりやすい
+  // 01_08/EX1.htmlの地面生成コードを流用
+  var g_geometry = new THREE.BoxGeometry(1000, 1, 1000);
+  var g_material = new THREE.MeshStandardMaterial({ color: 0x808080 });
+  var ground = new THREE.Mesh( g_geometry, g_material );
+  ground.position.set(0, 0, 0);
+  scene.add( ground );
+
+// ■ 4. アニメーションと操作（01_08/EX3.htmlのマウス操作を応用）
+  var mouseX = 0;
+  document.addEventListener("mousemove", (event) => {
+    // 画面中央を0として正規化
+    mouseX = (event.pageX - window.innerWidth / 2) / window.innerWidth;
+  });
+
+  var theta = 0;
+  function draw() {
+    requestAnimationFrame( draw );
+
+    // マウスの左右位置でグラフ全体を回転させる（インタラクション）
+    // 自動回転させたい場合は theta += 0.01; などにする
+    var targetRotation = mouseX * Math.PI * 2; 
+    graphGroup.rotation.y += (targetRotation - graphGroup.rotation.y) * 0.05;
+
+    camera.lookAt(new THREE.Vector3(0, 100, 0)); // グラフの中心を見る
+    renderer.render( scene, camera );
+  }
+  draw();
+</script>
+</body>
+</html>
