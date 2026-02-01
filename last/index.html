@@ -29,10 +29,10 @@
   <h3>気象データ可視化 (彦根)</h3>
   <form name="fm">
     <label>
-      <input type="checkbox" name="chkRain" checked onchange="updateVisibility()"> 降水量 (棒グラフ:青)
+      <input type="checkbox" name="chkRain" checked onchange="updateVisibility()"> 降水量 (棒:水テクスチャ)
     </label>
     <label>
-      <input type="checkbox" name="chkTemp" checked onchange="updateVisibility()"> 気温 (折れ線:赤)
+      <input type="checkbox" name="chkTemp" checked onchange="updateVisibility()"> 気温 (線:太陽テクスチャ)
     </label>
   </form>
   <hr>
@@ -60,19 +60,14 @@ function getCSV( file ){
 }
 
 // ■ 2. データの準備
-// data.csv を読み込む
 var csvData = getCSV("data.csv");
-
 var labels = [];
 var dataTemp = [];
 var dataRain = [];
 
-// 指定通り、3行目(index 2)からデータを取得
 for (var i = 2; i < csvData.length; i++) {
   var row = csvData[i];
-  // 空行などのエラー回避
   if (row.length < 5) continue;
-
   labels.push(row[0]);           // A列: 日付
   dataTemp.push(Number(row[1])); // B列: 月平均気温
   dataRain.push(Number(row[4])); // E列: 月合計降水量
@@ -89,7 +84,7 @@ document.body.appendChild( renderer.domElement );
 var light = new THREE.DirectionalLight(0xffffff);
 light.position.set(1, 1, 1);
 scene.add(light);
-var ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+var ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // テクスチャが暗くならないよう少し明るめに
 scene.add(ambientLight);
 
 // グラフ用グループ
@@ -98,40 +93,41 @@ scene.add(rainGroup);
 var tempGroup = new THREE.Group();
 scene.add(tempGroup);
 
-// ■ 4. グラフの生成
+// ■ 4. テクスチャとマテリアルの準備 (01_08/EX4.htmlの応用)
+// TextureLoaderを使って画像を読み込む
+var loader = new THREE.TextureLoader();
+var textureWater = loader.load('water.jpg');
+var textureSun = loader.load('sun.jpg');
+
+// テクスチャを適用したマテリアルを作成
+var matRain = new THREE.MeshStandardMaterial({ map: textureWater });
+var matTemp = new THREE.MeshStandardMaterial({ map: textureSun });
+
+
+// ■ 5. グラフの生成
 var barWidth = 20;
 var gap = 15;
 var totalWidth = (barWidth + gap) * dataRain.length;
-
-// マテリアル定義 (雨温図らしく色分け)
-var matRain = new THREE.MeshStandardMaterial({ color: 0x44aaff }); // 青
-var matTempPoint = new THREE.MeshBasicMaterial({ color: 0xffaa00 }); // オレンジ
-var matTempLine = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // 赤
 
 for (var i = 0; i < dataRain.length; i++) {
   var x = (barWidth + gap) * i - totalWidth / 2;
 
   // --- 降水量 (棒グラフ) ---
-  var rVal = dataRain[i];
-  // 降水量は値が大きいのでそのまま高さを適用 (必要に応じて係数を掛ける)
-  var hRain = rVal; 
-  
+  var hRain = dataRain[i];
   if (hRain > 0) {
     var geoBar = new THREE.BoxGeometry(barWidth, hRain, barWidth);
     var meshBar = new THREE.Mesh(geoBar, matRain);
-    // 棒グラフは下から伸びるように配置
     meshBar.position.set(x, hRain / 2, 0);
     rainGroup.add(meshBar);
   }
 
   // --- 気温 (折れ線グラフ) ---
   var tVal = dataTemp[i];
-  // 気温は数値が小さい(0~35度)ため、グラフ上で見やすくするために「5倍」に拡大表示しています
-  var plotHeight = tVal * 5; 
+  var plotHeight = tVal * 5; // 5倍に拡大表示
 
-  // プロット点
-  var geoPoint = new THREE.SphereGeometry(5, 16, 16);
-  var meshPoint = new THREE.Mesh(geoPoint, matTempPoint);
+  // プロット点 (太陽のテクスチャ)
+  var geoPoint = new THREE.SphereGeometry(6, 16, 16);
+  var meshPoint = new THREE.Mesh(geoPoint, matTemp);
   meshPoint.position.set(x, plotHeight, 0);
   tempGroup.add(meshPoint);
 
@@ -146,23 +142,26 @@ for (var i = 0; i < dataRain.length; i++) {
     var dist = Math.sqrt(dx*dx + dy*dy);
     var angle = Math.atan2(dy, dx);
 
-    var geoLine = new THREE.BoxGeometry(dist, 3, 3);
-    var meshLine = new THREE.Mesh(geoLine, matTempLine);
+    // 線にも太陽のテクスチャを適用
+    var geoLine = new THREE.BoxGeometry(dist, 4, 4);
+    var meshLine = new THREE.Mesh(geoLine, matTemp);
     meshLine.position.set((x + prevX)/2, (plotHeight + prevHeight)/2, 0);
     meshLine.rotation.z = angle;
     tempGroup.add(meshLine);
   }
 }
 
-// 地面
+// ★ 変更点: 床のオブジェクト生成コードを削除しました ★
+/*
 var geoGround = new THREE.BoxGeometry(totalWidth + 200, 2, 400);
 var matGround = new THREE.MeshStandardMaterial({ color: 0xcccccc });
 var ground = new THREE.Mesh(geoGround, matGround);
 ground.position.set(-gap/2, -1, 0);
 scene.add(ground);
+*/
 
 
-// ■ 5. インタラクション (01_08/hw1.html の模倣)
+// ■ 6. インタラクション
 var mouseX = 0;
 var mouseY = 0;
 document.addEventListener("mousemove", (event) => {
@@ -176,18 +175,16 @@ function updateVisibility() {
   tempGroup.visible = document.fm.chkTemp.checked;
 }
 
-// ■ 6. 描画ループ
+// ■ 7. 描画ループ
 function draw() {
   requestAnimationFrame( draw );
 
-  // マウス座標に基づいたカメラ位置計算 (01_08/hw1.htmlのロジック)
   var rot = mouseX * 2 * Math.PI;
-  var h = mouseY * 2000 - 1000;
+  // マウスを一番上に持っていくとカメラが下がりすぎないよう範囲を調整
+  var h = mouseY * 1200 - 200; 
 
-  var distance = 600; // カメラと中心の距離
+  var distance = 600;
   camera.position.set(Math.sin(rot) * distance, h, Math.cos(rot) * distance);
-  
-  // 常にグラフの中心付近(高さ100)を見る
   camera.lookAt(new THREE.Vector3(0, 100, 0));
 
   renderer.render( scene, camera );
