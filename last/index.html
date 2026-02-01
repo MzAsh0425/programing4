@@ -36,9 +36,6 @@
     <label><input type="checkbox" name="chkText" checked onchange="updateVisibility()"> ラベル・軸</label>
   </form>
   <hr>
-  <div style="font-size: small;">
-    <p><b>操作:</b> 左右=回転 / 上下=高さ</p>
-  </div>
 </div>
 
 <script>
@@ -62,7 +59,7 @@ for (var i = 2; i < csvData.length; i++) {
   var row = csvData[i];
   if (row.length < 5) continue;
   var dateStr = row[0];
-  var month = dateStr.split("/")[1] + "月";
+  var month = dateStr.split("/")[1]; 
   
   labels.push(month);
   dataTemp.push(Number(row[1]));
@@ -130,10 +127,10 @@ for (var i = 0; i < dataRain.length; i++) {
 function createAxis() {
   var material = new THREE.LineBasicMaterial({ color: 0xffffff });
   var points = [];
+  points.push( new THREE.Vector3( -totalWidth/2 - 20, 300, 0 ) );
   points.push( new THREE.Vector3( -totalWidth/2 - 20, 0, 0 ) );
   points.push( new THREE.Vector3( totalWidth/2 + 20, 0, 0 ) );
-  points.push( new THREE.Vector3( -totalWidth/2 - 20, 0, 0 ) );
-  points.push( new THREE.Vector3( -totalWidth/2 - 20, 300, 0 ) );
+  points.push( new THREE.Vector3( totalWidth/2 + 20, 300, 0 ) );
 
   var geometry = new THREE.BufferGeometry().setFromPoints( points );
   var line = new THREE.Line( geometry, material );
@@ -166,7 +163,7 @@ fontLoader.load('https://unpkg.com/three@0.128.0/examples/fonts/helvetiker_regul
   }
 
   // タイトルの描画
-  addText("Weather Data 2024 (Hikone)", -150, 320, 0, 20, 0xffffff);
+  addText("Weather Data 2025 (Hikone)", -150, 320, 0, 20, 0xffffff);
 
   // X軸ラベル (月) の描画
   for(var i=0; i<labels.length; i++) {
@@ -174,13 +171,19 @@ fontLoader.load('https://unpkg.com/three@0.128.0/examples/fonts/helvetiker_regul
     addText(labels[i], x, -30, 0, 10, 0xcccccc);
   }
 
-  // Y軸ラベル (目盛り) の描画
+  // Y軸ラベルを左右に分割
+  // 左軸 (降水量)
   for(var j=0; j<=300; j+=50) {
     addText(String(j), -totalWidth/2 - 60, j, 0, 10, 0xcccccc);
   }
+  // 右軸 (気温: データが5倍されているので、表示は1/5にする)
+  for(var j=0; j<=300; j+=50) {
+    addText(String(j/5), totalWidth/2 + 30, j, 0, 10, 0xcccccc);
+  }
   
-  // 凡例
-  addText("Temp (x5)", -totalWidth/2 - 60, 310, 0, 8, 0xffaa00);
+  // 凡例 (位置を左右の軸上に移動)
+  addText("Rain", -totalWidth/2 - 60, 310, 0, 8, 0x88ccff);
+  addText("Temp", totalWidth/2 + 30, 310, 0, 8, 0xffaa00);
 });
 /* ★★★ 新規実装箇所：終了 ★★★ */
 
@@ -199,7 +202,7 @@ document.addEventListener("mousemove", (event) => {
 
 function draw() {
   requestAnimationFrame( draw );
-  var rot = mouseX * 2 * Math.PI;
+  var rot = mouseX * 2 * Math.PI + Math.PI;
   var h = mouseY * 1200 - 200; 
   var distance = 650; 
   camera.position.set(Math.sin(rot) * distance, h, Math.cos(rot) * distance);
