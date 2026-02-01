@@ -2,89 +2,181 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>Final Project: 3D Graph</title>
+<title>Final Project: Data Visualization</title>
+<style>
+  body { margin: 0; overflow: hidden; }
+  /* コントロールパネルのスタイル */
+  #ctrl-panel {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 200px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 2px solid #333;
+    border-radius: 5px;
+    font-family: sans-serif;
+    z-index: 10; /* Canvasより手前に表示 */
+  }
+  h3 { margin-top: 0; font-size: 16px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+  label { display: block; margin: 5px 0; cursor: pointer; }
+</style>
 <script src="three.js"></script>
 </head>
 <body>
+
+<div id="ctrl-panel">
+  <h3>表示コントロール</h3>
+  <form name="fm">
+    <label>
+      <input type="checkbox" name="chkBar" checked onchange="updateVisibility()"> 棒グラフ (Bar)
+    </label>
+    <label>
+      <input type="checkbox" name="chkLine" onchange="updateVisibility()"> 折れ線グラフ (Line)
+    </label>
+  </form>
+  <hr>
+  <div style="font-size: small;">
+    <p>マウスを左右に動かすと<br>視点が回転します。</p>
+  </div>
+</div>
+
 <script>
-// ■ 1. 初期化処理（講義の定型文）
+// ■ 初期化処理 (これまでの講義の定型文)
   var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera( 70, 1000/500, 0.1, 10000 );
+  // 視点操作をするため、カメラの初期位置はdraw関数内で上書きされます
+  var camera = new THREE.PerspectiveCamera( 70, window.innerWidth/window.innerHeight, 0.1, 10000 );
   var renderer = new THREE.WebGLRenderer();
-  renderer.setSize(1000, 500 );
+  renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild( renderer.domElement );
   
-  // カメラ位置の調整（データ全体が見渡せる位置に）
-  camera.position.set(0, 300, 600); 
-  
-  // ライト（講義コードと同様の設定）
+  // ライトの設定
   var light = new THREE.DirectionalLight(0xffffff);
   light.position.set(1, 1, 1);
   scene.add(light);
-  var light3 = new THREE.AmbientLight(0xFFFFFF, 0.5);
-  scene.add(light3);
+  var ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+  scene.add(ambientLight);
 
-// ■ 2. データの定義（12_12の内容を応用）
-  // ここでは配列に直接数値を入れますが、12_12/hw1.htmlのgetCSV関数を使って外部データを読み込んでも良いでしょう
-  var data = [50, 120, 80, 200, 150, 40, 90, 170, 110, 60]; 
+// ■ データ定義 (12_12の気温データなどを想定)
+  var data = [30, 80, 150, 120, 200, 180, 90, 50, 110, 160, 220, 140];
+  var labels = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
 
-// ■ 3. グラフの生成（01_08/EX5.htmlのループ処理を応用）
-  // グループを作成してグラフ全体をまとめる
-  var graphGroup = new THREE.Group();
-  scene.add(graphGroup);
+  var barWidth = 30;
+  var gap = 20;
+  var totalWidth = (barWidth + gap) * data.length;
 
-  var barWidth = 40; // 棒の太さ
-  var gap = 20;      // 棒の間隔
+// ■ グラフ用グループの作成 (オブジェクトをまとめて管理)
+  var barGroup = new THREE.Group();
+  scene.add(barGroup);
+  
+  var lineGroup = new THREE.Group();
+  scene.add(lineGroup);
+  // 初期状態では折れ線グラフは非表示にしておく
+  lineGroup.visible = false;
+
+// ■ 2. グラフの生成処理
+  // 色を綺麗に見せるためのマテリアル
+  var materialBar = new THREE.MeshNormalMaterial(); 
+  var materialLine = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // 赤色
+  var materialPoint = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // 黄色
 
   for (var i = 0; i < data.length; i++) {
-    var value = data[i];
-    
-    // データの値を高さ(y)に反映した箱を作る
-    // BoxGeometry(幅, 高さ, 奥行き)
-    var geometry = new THREE.BoxGeometry(barWidth, value, barWidth);
-    
-    // 綺麗な色が出るMeshNormalMaterialを使用（またはMeshToonMaterialなど）
-    var material = new THREE.MeshNormalMaterial(); 
-    
-    var bar = new THREE.Mesh( geometry, material );
-    
-    // 位置合わせ：
-    // x: 配列の順番ごとにずらす
-    // y: 高さが中心から伸びるため、高さの半分だけ上にずらして「地面から生えている」ように見せる
-    var xPos = (barWidth + gap) * i - (data.length * (barWidth + gap) / 2);
-    bar.position.set(xPos, value / 2, 0);
-    
-    graphGroup.add(bar);
+    var val = data[i];
+    // X座標の計算 (全体が中央に来るように調整)
+    var x = (barWidth + gap) * i - totalWidth / 2;
+    var y = val;
+
+    // --- A. 棒グラフの作成 (01_08/EX1等と同様) ---
+    var geoBar = new THREE.BoxGeometry(barWidth, val, barWidth);
+    var meshBar = new THREE.Mesh(geoBar, materialBar);
+    // 高さが中心から伸びるため、y/2 の位置に置く
+    meshBar.position.set(x, y / 2, 0);
+    barGroup.add(meshBar);
+
+    // --- B. 折れ線グラフの作成 (工夫ポイント) ---
+    // 1. データ点（プロット）としての球体
+    var geoPoint = new THREE.SphereGeometry(10, 16, 16);
+    var meshPoint = new THREE.Mesh(geoPoint, materialPoint);
+    meshPoint.position.set(x, y, 0);
+    lineGroup.add(meshPoint);
+
+    // 2. 線をつなぐ (前の点がある場合のみ)
+    if (i > 0) {
+      var prevVal = data[i-1];
+      var prevX = (barWidth + gap) * (i - 1) - totalWidth / 2;
+      var prevY = prevVal;
+
+      // 2点間の距離と角度を計算 (数学関数の応用)
+      var dx = x - prevX;
+      var dy = y - prevY;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      var angle = Math.atan2(dy, dx);
+
+      // 線に見立てた細いBoxを作成
+      var geoLine = new THREE.BoxGeometry(dist, 4, 4); // 長さdist, 太さ4
+      var meshLine = new THREE.Mesh(geoLine, materialLine);
+      
+      // 2点の中点に配置
+      meshLine.position.set((x + prevX)/2, (y + prevY)/2, 0);
+      // 角度に合わせて回転 (Z軸回転)
+      meshLine.rotation.z = angle;
+      
+      lineGroup.add(meshLine);
+    }
   }
 
-  // 地面（グリッドや平面）があると位置関係がわかりやすい
-  // 01_08/EX1.htmlの地面生成コードを流用
-  var g_geometry = new THREE.BoxGeometry(1000, 1, 1000);
-  var g_material = new THREE.MeshStandardMaterial({ color: 0x808080 });
-  var ground = new THREE.Mesh( g_geometry, g_material );
-  ground.position.set(0, 0, 0);
-  scene.add( ground );
+  // 地面 (グリッド代わりの板)
+  var geoGround = new THREE.BoxGeometry(totalWidth + 100, 2, 400);
+  var matGround = new THREE.MeshStandardMaterial({ color: 0xcccccc });
+  var ground = new THREE.Mesh(geoGround, matGround);
+  ground.position.set(-gap/2, -1, 0); // グラフの足元に合わせる
+  scene.add(ground);
 
-// ■ 4. アニメーションと操作（01_08/EX3.htmlのマウス操作を応用）
+// ■ 3. マウスインタラクション (01_08/EX3の応用)
   var mouseX = 0;
   document.addEventListener("mousemove", (event) => {
-    // 画面中央を0として正規化
-    mouseX = (event.pageX - window.innerWidth / 2) / window.innerWidth;
+    // 画面中央を0とした比率 (-1.0 ～ 1.0)
+    mouseX = (event.pageX - window.innerWidth / 2) / (window.innerWidth / 2);
   });
 
-  var theta = 0;
+// ■ 4. 表示切替関数 (コントロールパネルから呼ばれる)
+  function updateVisibility() {
+    // フォームのチェック状態を取得して visible プロパティに反映
+    barGroup.visible = document.fm.chkBar.checked;
+    lineGroup.visible = document.fm.chkLine.checked;
+  }
+
+// ■ 5. 描画ループ
+  var rot = 0;
   function draw() {
     requestAnimationFrame( draw );
 
-    // マウスの左右位置でグラフ全体を回転させる（インタラクション）
-    // 自動回転させたい場合は theta += 0.01; などにする
-    var targetRotation = mouseX * Math.PI * 2; 
-    graphGroup.rotation.y += (targetRotation - graphGroup.rotation.y) * 0.05;
+    // マウス位置に応じてカメラ位置を計算 (円周上を移動)
+    // 01_08/EX3.htmlのロジックをベースに調整
+    var targetRot = mouseX * Math.PI; // ±180度回転可能に
+    // 滑らかに追従させる処理
+    rot += (targetRot - rot) * 0.05;
 
-    camera.lookAt(new THREE.Vector3(0, 100, 0)); // グラフの中心を見る
+    var distance = 600;
+    var camX = Math.sin(rot) * distance;
+    var camZ = Math.cos(rot) * distance;
+    
+    // カメラ位置更新
+    camera.position.set(camX, 400, camZ);
+    // 常にグラフの中心付近(0, 100, 0)を見る
+    camera.lookAt(new THREE.Vector3(0, 100, 0));
+
     renderer.render( scene, camera );
   }
   draw();
+
+  // ウィンドウリサイズ対応（おまけ）
+  window.addEventListener('resize', function() {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+
 </script>
 </body>
 </html>
