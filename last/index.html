@@ -104,7 +104,7 @@ for (var i = 0; i < dataRain.length; i++) {
   }
 
   var tVal = dataTemp[i];
-  var plotHeight = tVal * 5;
+  var plotHeight = tVal * 7.5;
   
   var meshPoint = new THREE.Mesh(new THREE.SphereGeometry(6, 16, 16), matTemp);
   meshPoint.position.set(x, plotHeight, 0);
@@ -112,7 +112,7 @@ for (var i = 0; i < dataRain.length; i++) {
 
   if (i > 0) {
     var prevX = (barWidth + gap) * (i - 1) - totalWidth / 2 + (barWidth/2);
-    var prevH = dataTemp[i-1] * 5;
+    var prevH = dataTemp[i-1] * 7.5;
     var dx = x - prevX;
     var dy = plotHeight - prevH;
     var dist = Math.sqrt(dx*dx + dy*dy);
@@ -176,9 +176,10 @@ fontLoader.load('https://unpkg.com/three@0.128.0/examples/fonts/helvetiker_regul
   for(var j=0; j<=300; j+=50) {
     addText(String(j), -totalWidth/2 - 60, j, 0, 10, 0xcccccc);
   }
-  // 右軸 (気温: データが5倍されているので、表示は1/5にする)
-  for(var j=0; j<=300; j+=50) {
-    addText(String(j/5), totalWidth/2 + 30, j, 0, 10, 0xcccccc);
+  // 右軸 (気温)
+  for(var t=0; t<=40; t+=10) {
+    var h = t * 7.5;
+    addText(String(t), totalWidth/2 + 30, h, 0, 10, 0xcccccc);
   }
   
   // 凡例 (位置を左右の軸上に移動)
